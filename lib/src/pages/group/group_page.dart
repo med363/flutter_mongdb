@@ -15,6 +15,7 @@ class GroupPage extends StatefulWidget {
 class _GroupPageState extends State<GroupPage> {
   IO.Socket? socket;
   List<MsgModel> listMsg = [];
+  TextEditingController _msgcontroller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -55,6 +56,7 @@ class _GroupPageState extends State<GroupPage> {
             child: Row(children: [
               Expanded(
                 child: TextFormField(
+                  controller: _msgcontroller,
                   decoration: const InputDecoration(
                     hintText: "Type here ...",
                     border: OutlineInputBorder(borderSide: BorderSide()),
@@ -62,7 +64,9 @@ class _GroupPageState extends State<GroupPage> {
                 ),
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    sendMsg(_msgcontroller.text, widget.name);
+                  },
                   icon: const Icon(
                     Icons.send,
                     color: Colors.teal,
