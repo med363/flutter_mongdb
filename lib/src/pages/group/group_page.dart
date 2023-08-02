@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:chat/src/pages/foundation/msg_widget/other_msg_widget.dart';
+import 'package:chat/src/pages/foundation/msg_widget/own_msg_widget.dart';
 import 'package:chat/src/pages/group/msg_model.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -25,7 +27,7 @@ class _GroupPageState extends State<GroupPage> {
 
   void connect() {
     // Dart client
-    socket = IO.io('http://localhost:3000', <String, dynamic>{
+    socket = IO.io('http://127.0.0.1:3000', <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });
@@ -33,9 +35,13 @@ class _GroupPageState extends State<GroupPage> {
     socket!.onConnect((_) => print('connect into frontend'));
     socket!.on("sendMsgServer", (msg) {
      print(msg);
-    listMsg.add(
+    setState(() {
+      listMsg.add(
       MsgModel(
-        msg: msg["msg"], type: msg["type"], Sender: msg["sendName"]));      
+        msg: msg["msg"],
+         type: msg["type"], 
+         Sender: msg["sendName"]));      
+    });
     }
 
     );
@@ -45,6 +51,9 @@ class _GroupPageState extends State<GroupPage> {
   void sendMsg(String msg, String SenderName) {
     MsgModel OwnMsg =MsgModel(msg: msg, type: "OwnMsg", Sender: SenderName); 
     listMsg.add(OwnMsg);
+    setState(() {
+      listMsg;
+    });
    socket!.emit('sendMsg',{
    "type": "OwnMsg",
    "msg": msg,
@@ -61,7 +70,22 @@ class _GroupPageState extends State<GroupPage> {
       body: Column(
         children: [
           Expanded(
-            child: Container(),
+            child: ListView.builder(
+              itemCount: listMsg.length,
+              itemBuilder: (context, index) {
+                if(listMsg[index].type == "OwnMsg"){
+                  return OwnMsgWidget(
+                    sender: listMsg[index].Sender,
+                     msg: listMsg[index].msg);
+                } else{
+                  return OtherMsgWidget(
+                    sender: listMsg[index].Sender,
+                     msg: listMsg[index].msg);
+                }
+                  
+              }
+
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
