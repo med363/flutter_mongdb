@@ -15,7 +15,32 @@ class _GroupPageState extends State<GroupPage> {
    appBar: AppBar(
 title: const Text("Anonymous grp"),
    ) ,
-   body: Text(widget.name),
+   body: Column(
+    children: [
+      Expanded(child: Container(),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  hintText: "Type here ...",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide()
+                  ),
+                ),
+                ),
+                ),
+                IconButton(onPressed: (){},
+                 icon: const Icon(Icons.send,
+                 color: Colors.teal,
+                 ))
+          ]),)
+    ],
+    
+   ),
     );
   }
 }
