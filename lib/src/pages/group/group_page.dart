@@ -31,13 +31,25 @@ class _GroupPageState extends State<GroupPage> {
     });
     socket!.connect();
     socket!.onConnect((_) => print('connect into frontend'));
+    socket!.on("sendMsgServer", (msg) {
+     print(msg);
+    listMsg.add(
+      MsgModel(
+        msg: msg["msg"], type: msg["type"], Sender: msg["sendName"]));      
+    }
+
+    );
+
   }
 
   void sendMsg(String msg, String SenderName) {
-   socket!.emit('sendMsg', {
+    MsgModel OwnMsg =MsgModel(msg: msg, type: "OwnMsg", Sender: SenderName); 
+    listMsg.add(OwnMsg);
+   socket!.emit('sendMsg',{
    "type": "OwnMsg",
    "msg": msg,
-   "SenderName": SenderName});
+   "SenderName": SenderName
+   });
 
   }
   @override
@@ -65,7 +77,13 @@ class _GroupPageState extends State<GroupPage> {
               ),
               IconButton(
                   onPressed: () {
+                    String msg = _msgcontroller.text;
+                    if(msg.isNotEmpty){
                     sendMsg(_msgcontroller.text, widget.name);
+                    _msgcontroller.clear();
+
+                    }
+
                   },
                   icon: const Icon(
                     Icons.send,
