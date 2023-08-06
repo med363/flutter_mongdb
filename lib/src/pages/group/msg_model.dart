@@ -4,8 +4,9 @@ class MsgModel {
   String Sender;
   MsgModel({
     required this.msg,
-        required this.type,
+    required this.type,
     required this.Sender,
 
   });
 }
+

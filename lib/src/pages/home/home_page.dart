@@ -1,5 +1,7 @@
+
 import 'package:chat/src/pages/group/group_page.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +13,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController nameController = TextEditingController();
   final formkey = GlobalKey<FormState>();
+  var uuid = Uuid();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +40,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               actions: [
-                                                  TextButton(onPressed: (){
-                                                                        nameController.clear();
-
-                                                    //return initial page
-                                                    Navigator.pop(context);
-                                                  },
+                  TextButton(onPressed: (){
+                  nameController.clear();
+                  //return initial page
+                  Navigator.pop(context);
+                   },
                  child: const Text(
                   "Cancel",
                   style: TextStyle(fontSize: 16, 
@@ -55,8 +57,11 @@ class _HomePageState extends State<HomePage> {
                     String name = nameController.text;
                     nameController.clear();
                   Navigator.pop(context);
-                  Navigator.push(context,MaterialPageRoute(
-                    builder: (context) =>  GroupPage(name:name)));
+                  Navigator.push(context,
+                  MaterialPageRoute(
+                    builder: (context) =>  GroupPage(
+                      name:name, userId: uuid.v1(),
+                      )));
                   }
 
                 },

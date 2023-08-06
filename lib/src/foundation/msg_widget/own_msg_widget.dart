@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 class OwnMsgWidget extends StatelessWidget {
   final String sender;
   final String msg;
-  const OwnMsgWidget({super.key, required this.sender, required this.msg});
+  const OwnMsgWidget({super.key, required this.msg,required this.sender, });
 
   @override
   Widget build(BuildContext context) {

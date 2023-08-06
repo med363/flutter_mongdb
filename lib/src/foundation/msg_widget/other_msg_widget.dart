@@ -3,8 +3,9 @@ class OtherMsgWidget extends StatelessWidget {
   final String sender;
   final String msg;
   const OtherMsgWidget({super.key, 
-  required this.sender, 
-  required this.msg});
+  required this.msg, 
+  required this.sender});
+  
 
   @override
   Widget build(BuildContext context) {
