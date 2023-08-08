@@ -9,11 +9,9 @@ import 'msg_model.dart';
 class GroupPage extends StatefulWidget {
   final String name;
   final String userId;
-  static int instancesCount = 0;
 
    GroupPage({Key? key, required this.name, required this.userId})
       : super(key: key) {
-      instancesCount++;
 
       }
   
@@ -33,7 +31,6 @@ class _GroupPageState extends State<GroupPage> {
   @override
   void dispose() {
     // Decrement the instancesCount when the instance is disposed
-    GroupPage.instancesCount--;
     super.dispose();
   }
 
@@ -51,13 +48,10 @@ class _GroupPageState extends State<GroupPage> {
     });
     socket!.connect();
     socket!.onConnect((_) {
-    print('connect into frontend - Total instances: ${GroupPage.instancesCount}');
+    print('connect into frontend ');
       socket!.on("sendMsgServer", (msg) {
         print(msg);
-        if (msg["userId"] != widget.userId &&
-            msg["msg"] != null &&
-            msg["type"] != null &&
-            msg["senderName"] != null) {
+        if (msg["userId"] != widget.userId) {
           setState(() {
             listMsg.add(
               MsgModel(
@@ -73,16 +67,16 @@ class _GroupPageState extends State<GroupPage> {
     });
   }
 
-  void sendMsg(String msg, String SenderName) {
-    MsgModel ownMsg = MsgModel(msg: msg, type: "OwnMsg", Sender: SenderName);
+  void sendMsg(String msg, String senderName) {
+    MsgModel ownMsg = MsgModel(msg: msg, type: "ownMsg", Sender: senderName);
     listMsg.add(ownMsg);
     setState(() {
       listMsg;
     });
     socket!.emit("sendMsg", {
-      "type": "OwnMsg",
+      "type": "ownMsg",
       "msg": msg,
-      "SenderName": SenderName,
+      "senderName": senderName,
       "userId": widget.userId,
     });
   }
@@ -101,7 +95,7 @@ class _GroupPageState extends State<GroupPage> {
            child: ListView.builder(
               itemCount: listMsg.length,
               itemBuilder: (context, index) {
-                if (listMsg[index].type == "OwnMsg") {
+                if (listMsg[index].type == "ownMsg") {
                   // Render OwnMsgWidget for own messages
                   return OwnMsgWidget(
                     msg: listMsg[index].msg,
@@ -157,4 +151,3 @@ class _GroupPageState extends State<GroupPage> {
     );
   }
 }
-
